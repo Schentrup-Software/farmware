@@ -18,10 +18,13 @@ body {
 
 #app {
   background-color: $charcoal;
-  color: $charcoal;
-  font-family: 'Roboto', sans-serif;
+  color: $creamyWhite;
   height: 100%;
   width: 100%;
+
+  * {
+    font-family: 'Helvetica';
+  }
 }
 
 .nav {
@@ -58,5 +61,16 @@ body {
   li:last-child {
     margin-right: $normalMargin;
     margin-left: auto;
+  }
+}
+
+.card {
+  margin: $normalMargin;
+  background-color: $creamyWhite;
+  color: $black;
+
+  * {
+    margin: $normalMargin;
+    color: $black;
   }
 }
