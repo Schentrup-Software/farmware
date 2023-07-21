@@ -1,12 +1,15 @@
 <script lang="ts">
-  import { writable } from 'svelte/store';
-  import { Nav, NavItem, NavLink } from 'sveltestrap';
-  import Login from './Login.svelte';
-  
-  const openModal = writable(false);
+  import { Nav, NavItem, NavLink, Button } from 'sveltestrap';
+  import { openLoginModal } from './modal';
 </script>
   
 <Nav>
+  <NavItem>
+    <img width="50" alt="logo" src="/Logo.png" />
+  </NavItem>
+  <NavItem>
+    <h1>Farmware</h1>
+  </NavItem>
   <NavItem>
     <NavLink href="#">Home</NavLink>
   </NavItem>
@@ -14,8 +17,6 @@
     <NavLink href="#">Feed Calculator</NavLink>
   </NavItem>
   <NavItem>
-    <NavLink on:click={()=> openModal.set(true)}>Login</NavLink>
+    <Button on:click={openLoginModal}>Login</Button>
   </NavItem>
 </Nav>
-
-<Login open={$openModal} />

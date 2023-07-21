@@ -1,5 +1,6 @@
 <script lang="ts">
   import { currentUser, pb } from "./pocketbase";
+  import { currentlyOpenModal, modals, closeModal } from "./modal";
   import {
     Button,
     Form,
@@ -11,9 +12,6 @@
     ModalFooter,
     ModalHeader,
   } from "sveltestrap";
-
-  export let open = false;
-  const toggle = () => (open = !open);
 
   let username: string;
   let password: string;
@@ -42,40 +40,43 @@
   }
 </script>
 
-<div>
-  <Modal isOpen={open} {toggle}>
-    <ModalHeader {toggle}>Login</ModalHeader>
-      <ModalBody>
-        {#if $currentUser}
-          <p>Logged in as {$currentUser.username}</p>
-        {:else}
-          <Form on:submit={login}>
-            <FormGroup>
-              <Label for="usernameInput">Username</Label>
-                <Input
-                  type="text"
-                  id="usernameInput"
-                  bind:value={username}
-                />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="passwordInput">Password</Label>
+{#if $currentlyOpenModal === modals.login}
+  <div>
+    <Modal isOpen={true} toggle={closeModal}>
+      <ModalHeader toggle={closeModal}>Login</ModalHeader>
+        <ModalBody>
+          {#if $currentUser}
+            <p>Logged in as {$currentUser.username}</p>
+          {:else}
+            <Form on:submit={login}>
+              <FormGroup>
+                <Label for="usernameInput">Username</Label>
                   <Input
-                    type="password"
-                    id="passwordInput"
-                    bind:value={password}
+                    type="text"
+                    id="usernameInput"
+                    bind:value={username}
                   />
-                </FormGroup>
-            </Form>
-        {/if}
-      </ModalBody>
-      <ModalFooter>
-        {#if $currentUser}
-          <Button on:click={signOut}>Logout</Button>
-        {:else}
-          <Button color="primary" on:click={login}>Login</Button>
-        {/if}
-          <Button color="secondary" on:click={toggle}>Cancel</Button>
-      </ModalFooter>
-  </Modal>
-</div>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="passwordInput">Password</Label>
+                    <Input
+                      type="password"
+                      id="passwordInput"
+                      bind:value={password}
+                    />
+                  </FormGroup>
+              </Form>
+          {/if}
+        </ModalBody>
+        <ModalFooter>
+          {#if $currentUser}
+            <Button on:click={signOut}>Logout</Button>
+          {:else}
+            <Button color="primary" on:click={login}>Login</Button>
+          {/if}
+            <Button color="secondary" on:click={closeModal}>Cancel</Button>
+        </ModalFooter>
+    </Modal>
+  </div>
+{/if}
+

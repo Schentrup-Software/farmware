@@ -1,0 +1,62 @@
+$creamyWhite: #F9F7F2;
+$sunnyOrange: #FFA500;
+$skyBlue: #4FA0D8;
+$barnRed: #B53432;
+$harvestGold: #FFD700;
+$richBrown: #8B5A2B;
+$earthyGreen: #5CB16D;
+
+$charcoal: #364652;
+$black: #071108;
+
+$normalMargin: 10px;
+
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+#app {
+  background-color: $charcoal;
+  color: $charcoal;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+.nav {
+  align-items: center;
+  background-color: $creamyWhite;
+  color: $charcoal;
+
+  .nav-item {
+    margin: $normalMargin;
+  }
+
+  h1 {
+    color: $black;
+  }
+
+  img {
+    width: 50px;
+  }
+
+  a {
+    color: $charcoal;
+    text-decoration: none;
+  }
+
+  button {
+    background-color: $sunnyOrange;
+    color: $black;
+    border: none;
+    border-radius: 5px;
+    padding: $normalMargin;
+    margin: $normalMargin;
+  }
+
+  li:last-child {
+    margin-right: $normalMargin;
+    margin-left: auto;
+  }
+}
