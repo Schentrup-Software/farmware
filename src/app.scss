@@ -58,6 +58,11 @@ body {
     margin: $normalMargin;
   }
 
+  p {
+    margin: $normalMargin;
+    font-size: x-small;
+  }
+
   li:last-child {
     margin-right: $normalMargin;
     margin-left: auto;

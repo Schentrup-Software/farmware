@@ -4,11 +4,17 @@
   import FeedCalculator from "./routes/FeedCalculator.svelte";
   import About from "./routes/About.svelte";
   import { Nav, NavItem, NavLink, Button } from 'sveltestrap';
-  import { openLoginModal } from './lib/modal';
+  import { openLoginModal, openRegisterModal } from './lib/modal';
   import { Link } from "svelte-routing";
   import Home from "./routes/Home.svelte";
+  import Register from "./lib/Register.svelte";
+  import { currentUser, pb } from "./lib/pocketbase";
 
   export let url = "";
+
+  function signOut() {
+    pb.authStore.clear();
+  }
 </script>
 
 <Router {url}>
@@ -35,7 +41,12 @@
       </NavLink>
     </NavItem>
     <NavItem>
-      <Button on:click={openLoginModal}>Login</Button>
+      {#if $currentUser}
+        <Button on:click={signOut}>Logout</Button>
+      {:else}
+        <Button on:click={openLoginModal}>Login</Button>
+        <Button on:click={openRegisterModal}>Register</Button>
+      {/if}
     </NavItem>
   </Nav>
   <div>
@@ -47,4 +58,5 @@
 
 <!-- Modals -->
 <Login />
+<Register />
 

@@ -13,26 +13,11 @@
     ModalHeader,
   } from "sveltestrap";
 
-  let username: string;
+  let email: string;
   let password: string;
 
   async function login() {
-    await pb.collection("users").authWithPassword(username, password);
-  }
-
-  async function register() {
-    try {
-      const data = {
-        username,
-        password,
-        passwordConfirm: password,
-      };
-
-      await pb.collection("users").create(data);
-      await login();
-    } catch (e) {
-      console.log(e);
-    }
+    await pb.collection("users").authWithPassword(email, password);
   }
 
   function signOut() {
@@ -46,15 +31,15 @@
       <ModalHeader toggle={closeModal}>Login</ModalHeader>
         <ModalBody>
           {#if $currentUser}
-            <p>Logged in as {$currentUser.username}</p>
+            <p>Logged in as {$currentUser.name}</p>
           {:else}
             <Form on:submit={login}>
               <FormGroup>
-                <Label for="usernameInput">Username</Label>
+                <Label for="usernameInput">Email</Label>
                   <Input
                     type="text"
                     id="usernameInput"
-                    bind:value={username}
+                    bind:value={email}
                   />
                   </FormGroup>
                   <FormGroup>
@@ -70,11 +55,12 @@
         </ModalBody>
         <ModalFooter>
           {#if $currentUser}
-            <Button on:click={signOut}>Logout</Button>
+            <Button color="primary" on:click={closeModal}>Close</Button>
+            <Button color="secondary" on:click={signOut}>Logout</Button>
           {:else}
             <Button color="primary" on:click={login}>Login</Button>
-          {/if}
             <Button color="secondary" on:click={closeModal}>Cancel</Button>
+          {/if}
         </ModalFooter>
     </Modal>
   </div>
