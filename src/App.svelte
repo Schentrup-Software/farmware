@@ -9,6 +9,7 @@
   import Home from "./routes/Home.svelte";
   import Register from "./lib/Register.svelte";
   import { currentUser, pb } from "./lib/pocketbase";
+  import Importer from "./routes/Importer.svelte";
 
   export let url = "";
 
@@ -40,6 +41,13 @@
         <Link to="/feed-calculator">Feed Calculator</Link>
       </NavLink>
     </NavItem>
+    {#if $currentUser?.role === "Admin"}
+      <NavItem>
+        <NavLink>
+          <Link to="/import">Importer</Link>
+        </NavLink>
+      </NavItem>
+    {/if}
     <NavItem>
       {#if $currentUser}
         <Button on:click={signOut}>Logout</Button>
@@ -53,6 +61,7 @@
     <Route path="/feed-calculator" component={FeedCalculator} />
     <Route path="/about" component={About} />
     <Route path="/" component={Home} />
+    <Route path="/import" component={Importer} />
   </div>
 </Router>
 
