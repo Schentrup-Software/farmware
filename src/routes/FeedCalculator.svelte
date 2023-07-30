@@ -291,7 +291,7 @@
             <Row>
               <FormGroup>
                 <Label for="conditionInput">Condition</Label>
-                <Input type="select" name="Condition Input" id="conditionInput" placeholder="Select the animals condition..." on:change={onConditionChange}>
+                <Input type="select" name="Condition Input" id="conditionInput" placeholder="Select the animals condition..." on:change={onConditionChange} bind:value={$chosenConditionID}>
                   {#each $conditions as conditionItem (conditionItem.id)}
                     <option value={conditionItem.id}>{conditionItem.name}</option>
                   {/each}
@@ -401,7 +401,7 @@
           <tbody>
             {#each $cart as cartItem (cartItem.id)}
               <tr>
-                <th id={'text_' + cartItem.id}>{cartItem.expand.species_id.name}</th>
+                <th id={'text_' + cartItem.id}><a target="_blank" href={cartItem.source}>{cartItem.expand.species_id.name}</a></th>
                 <td>{cartItem.quantity}</td>
               </tr>
               <Popover
@@ -409,6 +409,7 @@
                 placement="left"
                 target={'text_' + cartItem.id}
                 title="Details"
+                dismissible
               >
                 <p>Age: {cartItem.age} {cartItem.age_units}</p>
                 <p>Weight: {cartItem.animal_weight} {cartItem.animal_weight_units}</p>

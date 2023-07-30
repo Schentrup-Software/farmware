@@ -7,7 +7,7 @@
   <Card>
     <Container>
       <Row>
-        <h1 style="margin-left: 0;">Home</h1>
+        <h1 class="removeLeftMargin">Home</h1>
       </Row>
       <Row>
         <p>
@@ -24,7 +24,7 @@
         <Col sm="12" md="4">
           <Card>
             <div class="addMargin">
-              <h2>Feed Calculator</h2>
+              <h2 class="removeLeftMargin">Feed Calculator</h2>
               <p>
                 The feed calculator is a tool for calculating feed rations for your
                 animals. You can find it{' '}
