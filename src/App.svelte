@@ -31,11 +31,11 @@
         <Link to="/">Home</Link>
       </NavLink>
     </NavItem>
-    <NavItem>
+    <!--<NavItem>
       <NavLink>
         <Link to="/about">About</Link>
       </NavLink>
-    </NavItem>
+    </NavItem>-->
     <NavItem>
       <NavLink>
         <Link to="/feed-calculator">Feed Calculator</Link>
