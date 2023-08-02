@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    Card,
     Button,
     Form,
     FormGroup,
@@ -28,6 +27,7 @@
     species,
     alertMessage,
   } from "./store";
+  import { writable } from "svelte/store";
 
   onMount(async () => {
     getSpecies();
@@ -40,8 +40,8 @@
     feeds.set([]);
     
     chosenConditionID = '';
-    age = null;
-    weight = null;
+    age.set(null);
+    weight.set(null);
 
     if (!$chosenSpeciesID) {
       conditions.set([]);
@@ -62,7 +62,7 @@
     getFeeds($chosenSpeciesID, chosenConditionID);
   }
 
-  let age = null;
+  const age = writable(null);
   let ageUnits = 'weeks';
 
   function calcMinAge(feedData) {
@@ -77,19 +77,21 @@
     return feedData.map(feed => convertToDays(feed.age, feed.age_units)).reduce((a, b) => reduce(a, b), 0);
   }
 
-  function validateAge(feedData) {
-    if (age == null) return null;
+  function validateAge(feedData, ageData) {
+    if (ageData == null) return false;
 
-    if (age < calcMinAge(feedData)) {
+    ageData = convertToDays(ageData, ageUnits);
+
+    if (ageData < calcMinAge(feedData)) {
       return false;
-    } else if (age > calcMaxAge(feedData)) {
+    } else if (ageData > calcMaxAge(feedData)) {
       return false;
     }
 
     return true;
   }
 
-  let weight = null;
+  const weight = writable(null);
   let weightUnits = 'pounds';
 
   function calcMinWeight(feedData) {
@@ -104,12 +106,14 @@
     return feedData.map(feed => convertToPounds(feed.animal_weight, feed.animal_weight_units)).reduce((a, b) => reduce(a, b), 0);
   }
 
-  function validateWeight(feedData) {
-    if (weight == null) return null;
+  function validateWeight(feedData, weightData) {
+    if (weightData == null) return false;
 
-    if (weight < calcMinWeight(feedData)) {
+    weightData = convertToPounds(weightData, weightUnits);
+
+    if (weightData < calcMinWeight(feedData)) {
       return false;
-    } else if (weight > calcMaxWeight(feedData)) {
+    } else if (weightData > calcMaxWeight(feedData)) {
       return false;
     }
 
@@ -121,10 +125,10 @@
   function addToCart(feedData, event) {
     event.preventDefault();
 
-    if (validateAge(feedData)) {
+    if (validateAge(feedData, $age)) {
       const ageMatch = feedData.reduceRight((previous, current) => 
-        Math.abs(convertToDays(age, ageUnits) - convertToDays(previous.age, previous.age_units))
-        < Math.abs(convertToDays(age, ageUnits) - convertToDays(current.age, current.age_units))
+        Math.abs(convertToDays($age, ageUnits) - convertToDays(previous.age, previous.age_units))
+        < Math.abs(convertToDays($age, ageUnits) - convertToDays(current.age, current.age_units))
         ? previous : current     
       );
 
@@ -134,10 +138,10 @@
       }
     }
 
-    if (validateWeight(feedData)) {
+    if (validateWeight(feedData, $weight)) {
       const weightMatch = feedData.reduceRight((previous, current) => 
-        Math.abs(convertToPounds(weight, weightUnits) - convertToPounds(previous.animal_weight, previous.animal_weight_units))
-        < Math.abs(convertToPounds(weight, weightUnits) - convertToPounds(current.animal_weight, current.animal_weight_units))
+        Math.abs(convertToPounds($weight, weightUnits) - convertToPounds(previous.animal_weight, previous.animal_weight_units))
+        < Math.abs(convertToPounds($weight, weightUnits) - convertToPounds(current.animal_weight, current.animal_weight_units))
         ? previous : current     
       );
 
@@ -204,9 +208,10 @@
                 id="ageNumber"
                 min={calcMinAge($feeds)} 
                 max={calcMaxAge($feeds)}
-                bind:value={age}
-                feedback="Age must be between {calcMinAge($feeds)} and {calcMaxAge($feeds)}"
-                disabled={validateWeight($feeds) === true}
+                bind:value={$age}
+                valid={$age && validateAge($feeds, $age)}
+                invalid={$age && !validateAge($feeds, $age)}
+                disabled={validateWeight($feeds, $weight)}
               />
               <InputGroupText>
                 Weeks
@@ -224,12 +229,11 @@
                 id="weightNumber"
                 min={calcMinWeight($feeds)} 
                 max={calcMaxWeight($feeds)}
-                bind:value={weight}
-                valid={validateWeight($feeds) === true}
-                invalid={validateWeight($feeds) === false}
+                bind:value={$weight}
+                valid={$weight && validateWeight($feeds, $weight)}
+                invalid={$weight && !validateWeight($feeds, $weight)}
                 step="0.01"
-                feedback="Weight must be between {calcMinWeight($feeds)} and {calcMaxWeight($feeds)}"
-                disabled={validateAge($feeds) === true}
+                disabled={validateAge($feeds, $age)}
               />
               <InputGroupText>
                 Pounds

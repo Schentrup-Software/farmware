@@ -19,7 +19,7 @@
   <tbody>
     {#each $cart as cartItem (cartItem.id)}
       <tr>
-        <th id={'text_' + cartItem.id}><a target="_blank" href={cartItem.source}>{cartItem.expand.species_id.name}</a></th>
+        <th id={'text_' + cartItem.id}>{cartItem.expand.species_id.name}</th>
         <td>{cartItem.quantity}</td>
       </tr>
       <Popover
